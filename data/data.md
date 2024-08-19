@@ -30,22 +30,37 @@ There are many items within this repository. I wanted a meaningful categorizatio
 <category>_<type>_<functionality>_<specifics>.spl
 ```
 
-### Explanation of Each Component
+### Searching with `grep`
 
-- **`<category>`**: Represents the broad category under which the `.spl` file falls:
+- **To find all security-related alert type spl queries**:
+
+  ```bash
+  grep -l 'alert_security_' *.spl
+  ```
+
+- **To find all performance-related ql queries**:
+
+  ```bash
+  grep -l '_performance_' *.spl
+  ```
+
+
+### Convention Adopted
+
+- **`<category>`**: Represents category:
   - `alert`
   - `search`
   - `dashboard`
   - `lookup`
   - `datamodel`
 
-- **`<type>`**: Describes the specific type within the category:
+- **`<type>`**: Describes the specific type:
   - `security`
   - `performance`
   - `network`
   - `dimension`
 
-- **`<functionality>`**: Indicates the primary function or action of the `.spl` file:
+- **`<functionality>`**: Indicates the primary function or action:
   - `monitor`
   - `trigger`
   - `extract`
@@ -54,7 +69,7 @@ There are many items within this repository. I wanted a meaningful categorizatio
   - `filter`
   - `enumeration`
 
-- **`<specifics>`**: Additional specifics that differentiate this `.spl` file from others:
+- **`<specifics>`**: Additional specifics for special-case differentiation or reusable patterns:
   - `cpu_usage`
   - `failed_login`
   - `analyst_dashboard`
@@ -99,16 +114,3 @@ There are many items within this repository. I wanted a meaningful categorizatio
 - **Searchability**: Facilitates easy searching and filtering using `grep` or other search tools. For instance, `grep 'alert_security_'` will quickly show all security-related alert queries.
 - **Scalability**: The convention can be easily expanded as new categories or types emerge.
 
-### Searching with `grep`
-
-- **To find all security-related alerts**:
-
-  ```bash
-  grep -l 'alert_security_' *.spl
-  ```
-
-- **To find all SPL files related to performance**:
-
-  ```bash
-  grep -l '_performance_' *.spl
-  ```
