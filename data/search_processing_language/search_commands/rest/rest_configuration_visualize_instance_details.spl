@@ -1,0 +1,20 @@
+|rest splunk_server=local /services/server/info | fields *
+| transpose | table key value   | eval key=mvindex(key,0), value=mvindex(value,0)
+| eval key=replace(key,"server_","")
+| eval key=replace(key,"_"," ")
+| eval key=capitalize(key)
+| eval value=case(value=="0","No",value=="1","Yes",1==1,value)
+| fields - _time
+| table key value
+| sort key
+```
+    This SPL script is used to extract the details of the Splunk server.
+
+    - The script uses the `rest` command to list the details of the Splunk server.
+    - The `transpose` command is used to transpose the rows and columns of the table.
+    - The `eval` command is used to replace the underscores in the field names with spaces and capitalize the field names.
+    - The `case` function is used to replace the values of `0` and `1` with `No` and `Yes` respectively.
+    - The `fields` command is used to remove the `_time` field.
+    - The `table` command is used to display the key-value pairs.
+    - The `sort` command is used to sort the results by the key field.
+```

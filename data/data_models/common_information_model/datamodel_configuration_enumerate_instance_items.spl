@@ -1,0 +1,16 @@
+|datamodel
+|spath output=modelName path=modelName
+|spath output=description path=description
+|where description != "This model has been deprecated" AND description != ""
+|table modelName description
+|sort modelName
+``` 
+    This SPL script is used to extract the model name and description of all the models that are not deprecated.
+
+    - The script uses the `datamodel` command to list all the models in the system.
+    - The `spath` command is used to extract the `modelName` and `description` fields from the output.
+    - The `where` command is used to filter out the models that are deprecated or have no description.
+    - The `table` command is used to display the `modelName` and `description` fields in a tabular format.
+    - The `sort` command is used to sort the output by `modelName`.
+
+```

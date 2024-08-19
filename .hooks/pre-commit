@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Function to check if this is the initial commit
+is_initial_commit() {
+    git rev-parse --verify HEAD >/dev/null 2>&1 || return 0
+    return 1
+}
+
+# Normalize line endings before staging
+git add --renormalize .
+
+# Run the markdown generation script
+bash .utilities/generatemarkdown.sh
+
+# Stage any modified or newly generated markdown files
+git add -- **/*.md
+
+# Check if this is the initial commit
+if is_initial_commit; then
+    echo "Initial commit detected. Skipping unstaged changes check."
+else
+    # Check for unstaged changes using `git diff --name-only`
+    unstaged_files=$(git diff --name-only)
+
+    if [ -z "$unstaged_files" ]; then
+        echo "No unstaged changes detected. Proceeding with commit."
+    else
+        echo "Unstaged changes detected in the following files:"
+        echo "$unstaged_files"
+        echo "Please stage your changes before committing."
+        exit 1
+    fi
+fi
+
+# If everything is staged, proceed with the commit
+exit 0

@@ -1,0 +1,62 @@
+| union [
+
+``` Indexes```
+| metadata type=sourcetypes index=* 
+| table sourcetype 
+| map search="search index=* sourcetype=$sourcetype$ | stats count | fieldsummary | table field fieldtype"
+| eval source="index"
+], [
+
+``` CSV Lookups```
+| rest /services/data/lookup-table-files
+| table title eai:data
+| map search="| inputlookup $title$ | fieldsummary | table field fieldtype"
+| eval source="lookup_csv"
+], [
+
+``` KV Store Lookups```
+| rest /servicesNS/-/-/storage/collections/config
+| table title
+| map search="| inputlookup $title$ | fieldsummary | table field fieldtype"
+| eval source="lookup_kvstore"
+], [
+
+``` Data Models (including all submodels)```
+| tstats summariesonly=false values(*) as * from datamodel=* 
+| table _datamodel | map search="| datamodel $datamodel$ | search | stats count | fieldsummary | table field fieldtype"
+| eval source="datamodel"
+], [
+
+``` Incident Management (ES) ```
+| datamodel Incident_Management All_Incidents 
+| table * 
+| fieldsummary | table field fieldtype
+| eval source="incident"
+], [
+
+``` Tags and Event Types ```
+| eventtype=* OR tag=* 
+| stats count by eventtype, tag | fieldsummary | table field fieldtype
+| eval source="eventtype_tag"
+], [
+
+``` Macro Definitions (if applicable) ```
+| rest /servicesNS/-/-/configs/conf-macros 
+| table title definition
+| eval source="macro_definition"
+]
+
+| stats values(fieldtype) as fieldtype by field source
+| table field fieldtype source
+
+```
+    This SPL script enumerates all the fields and their types in the following sources:
+
+    - Indexes
+    - CSV Lookups
+    - KV Store Lookups
+    - Data Models
+    - Incident Management (ES)
+    - Tags and Event Types
+    - Macro Definitions (if applicable)
+```

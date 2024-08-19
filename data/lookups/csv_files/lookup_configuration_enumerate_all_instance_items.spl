@@ -1,0 +1,19 @@
+|rest splunk_server="local" /servicesNS/-/-/data/lookup-table-files
+|search title="*.csv"
+|rename eai:acl.perms.read as app_perms_r
+        eai:appName as app_name
+        eai:userName as app_owner 
+|where disabled=0
+|stats count as csv_count
+       values(title) as titles
+       values(updated) as updated_dates by app_name app_owner app_perms_r
+``` 
+    This SPL script is used to extract the list of all the lookup files that are enabled in the system.
+
+    - The script uses the `rest` command to list all the lookup files in the system.
+    - The `search` command is used to filter out the lookup files that have the `.csv` extension.
+    - The `rename` command is used to rename the fields for better readability.
+    - The `where` command is used to filter out the lookup files that are disabled.
+    - The `stats` command is used to display the count of lookup files, their titles, and updated dates grouped by `app_name`, `app_owner`, and `app_perms_r`.
+
+```
