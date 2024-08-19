@@ -2,8 +2,7 @@
 
 ```mermaid
 graph TD;
-    Z[<a href="../" target="_blank" style="color:black">Go Back to Index</a>]:::backLevelStyle
-    Z --> A[data]:::firstLevelStyle
+    A[Click Items To Navigate]:::firstLevelStyle
     A --> B[<a href="data/alerts/" target="_blank" style="color:white">alerts</a>]:::secondLevelStyle
     A --> C[<a href="data/apps/" target="_blank" style="color:white">apps</a>]:::secondLevelStyle
     A --> D[<a href="data/dashboards/" target="_blank" style="color:white">dashboards</a>]:::secondLevelStyle
@@ -43,7 +42,6 @@ There are many items within this repository. I wanted a meaningful categorizatio
   ```bash
   grep -l '_performance_' *.spl
   ```
-
 
 ### Convention Adopted
 
@@ -113,4 +111,3 @@ There are many items within this repository. I wanted a meaningful categorizatio
 - **Clarity**: Provides a clear indication of what the `.spl` file does and where it belongs.
 - **Searchability**: Facilitates easy searching and filtering using `grep` or other search tools. For instance, `grep 'alert_security_'` will quickly show all security-related alert queries.
 - **Scalability**: The convention can be easily expanded as new categories or types emerge.
-
