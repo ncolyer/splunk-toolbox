@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+github_url="https://github.com/ncolyer/splunk-toolbox/blob/main/data"
+repo_name="splunk-toolbox"
+
 # Function to convert a string to title case
 to_title_case() {
     echo "$1" | sed 's/_/ /g' | sed 's/\b\(.\)/\u\1/g'
@@ -12,9 +15,6 @@ create_markdown() {
     local subdir_safe
     local subdirs=()
     local letter="B"
-
-    # Repository URL
-    local github_url="https://github.com/ncolyer/splunk-toolbox/blob/main/data"
     
     # Folder name
     local foldername
@@ -88,7 +88,7 @@ create_verb_markdown() {
         printf "%-25s %-25s %-25s %-25s\n" "Category" "Type" "Functionality" "Specifics"
     } >> "$markdown_file"
 
-    # Find all .spl files in the specified directory, process and format their names
+    # Find all .spl files in the directory and all subdirectories
     find "$directory" -type f -name "*.spl" | while read -r file; do
         # Extract the filename without the path and extension
         filename=$(basename "$file" .spl)
@@ -103,7 +103,7 @@ create_verb_markdown() {
 
 # Traverse directories and create markdown files
 find ./data -type d -not -path '*/\.*' | while read -r directory; do
-    if [ "$directory" != "./data" ]; then
+    if [ "$directory" != "./$repo_name" ]; then
         create_markdown "$directory"
         create_verb_markdown "$directory"
     fi
