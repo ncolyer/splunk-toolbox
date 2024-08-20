@@ -36,10 +36,11 @@ create_markdown() {
                 subdir_basename=$(basename "$subdir")
                 subdir_safe=$(echo "$subdir_basename" | sed 's/ /_/g' | sed 's/-/_/g')
 
-                # Correct URL generation based on relative paths
+                # Generate the correct URL by replacing the path
                 if [ -n "$(find "$subdir" -mindepth 1 -print -quit)" ]; then
+                    url_path="https://github.com/ncolyer/splunk-toolbox/blob/main/data/${subdir_safe}.md"
                     # Use secondLevelStyle for non-empty subdirectories with correct hyperlink
-                    echo "    A --> ${letter}[<a href=\"./$subdir_safe/\" target=\"_blank\" style=\"color:white\">$subdir_basename</a>]:::secondLevelStyle"
+                    echo "    A --> ${letter}[<a href=\"$url_path\" target=\"_blank\" style=\"color:white\">$subdir_basename</a>]:::secondLevelStyle"
                 else
                     # Use secondLevelStyleMissing for empty subdirectories and remove hyperlink
                     echo "    A --> ${letter}[$subdir_safe]:::secondLevelStyleMissing"
