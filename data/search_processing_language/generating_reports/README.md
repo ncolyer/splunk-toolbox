@@ -14,3 +14,7 @@ Category                  Type                      Functionality             Sp
 # Generating Reports - Verb Documentation
  
 Category                  Type                      Functionality             Specifics                
+ 
+# Generating Reports - Verb Documentation
+ 
+Category                  Type                      Functionality             Specifics                

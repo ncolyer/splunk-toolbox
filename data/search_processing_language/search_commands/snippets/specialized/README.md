@@ -14,3 +14,7 @@ Category                  Type                      Functionality             Sp
 # Specialized - Verb Documentation
  
 Category                  Type                      Functionality             Specifics                
+ 
+# Specialized - Verb Documentation
+ 
+Category                  Type                      Functionality             Specifics                
