@@ -9,16 +9,14 @@ create_markdown() {
     local letter="B"
 
     # Repository URL
-    local github_url
-    github_url="https://github.com/ncolyer/splunk-toolbox/blob/main/data"
+    local github_url="https://github.com/ncolyer/splunk-toolbox/blob/main/data"
     
     # Folder name
     local foldername
     foldername=$(basename "$directory")
     
     # Markdown file name
-    local markdown_file
-    markdown_file="$directory/README.md"
+    local markdown_file="$directory/README.md"
 
     # Replace spaces and hyphens with underscores for Mermaid compatibility
     local foldername_safe
@@ -32,7 +30,6 @@ create_markdown() {
     while IFS= read -r -d '' subdir; do
         subdirs+=("$subdir")
     done < <(find "$directory" -mindepth 1 -maxdepth 1 -type d -print0)
-
 
     # Create the Mermaid diagram if there are subdirectories
     #-----------------------------------------------------------------------
@@ -76,22 +73,23 @@ create_markdown() {
     fi
 }
 
+# Function to append verb documentation to the markdown file
 create_verb_markdown() {
     local directory="$1"
+    local foldername
     local markdown_file="$directory/README.md"
-
+    foldername=$(basename "$directory")
+    
     # Print the header
     {
         echo " "
         echo " # $foldername Verb Documentation"
         echo " "
+        printf "%-25s %-25s %-25s %-25s\n" "Category" "Type" "Functionality" "Specifics"
     } >> "$markdown_file"
     
-    printf "%-25s %-25s %-25s %-25s\n" "Category" "Type" "Functionality" "Specifics" >> "$markdown_file"
-
     # Find all .spl files in the specified directory, process and format their names
     find "$directory" -type f -name "*.spl" | while read -r file; do
-
         # Extract the filename without the path and extension
         filename=$(basename "$file" .spl)
         
