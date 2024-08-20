@@ -6,14 +6,15 @@ is_initial_commit() {
     return 1
 }
 
-# Normalize line endings before staging
-git add --renormalize .
-
 # Run the markdown generation script
 bash .utilities/generatemarkdown.sh
 
+# Normalize line endings before staging
+git add --renormalize .
+
 # Stage any modified or newly generated markdown files
 git add -- **/*.md
+
 
 # Check if this is the initial commit
 if is_initial_commit; then
