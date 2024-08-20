@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Function to create markdown file with Mermaid diagram
 create_markdown() {
@@ -16,7 +16,7 @@ create_markdown() {
 
     # Replace spaces and hyphens with underscores for Mermaid compatibility
     foldername_safe=$(echo "$foldername" | sed 's/ /_/g' | sed 's/-/_/g')
-    
+
     # Find subdirectories
     while IFS= read -r -d '' subdir; do
         subdirs+=("$subdir")
@@ -30,19 +30,19 @@ create_markdown() {
             echo '```mermaid'
             echo "graph TD;"
             echo "    Z[<a href=\"../\" target=\"_blank\" style=\"color:black\">Go Back to Index</a>]:::backLevelStyle"
-            echo "    Z --> A[$foldername]:::firstLevelStyle"
+            echo "    Z --> A[$foldername_safe]:::firstLevelStyle"
 
             for subdir in "${subdirs[@]}"; do
                 subdir_basename=$(basename "$subdir")
                 subdir_safe=$(echo "$subdir_basename" | sed 's/ /_/g' | sed 's/-/_/g')
 
-                # Check if the subdirectory contains any files or subdirectories
+                # Correct URL generation based on relative paths
                 if [ -n "$(find "$subdir" -mindepth 1 -print -quit)" ]; then
-                    # Use secondLevelStyle for non-empty subdirectories with hyperlink
-                    echo "    A --> ${letter}[<a href=\"$foldername_safe/$subdir_safe/\" target=\"_blank\" style=\"color:white\">$subdir_basename</a>]:::secondLevelStyle"
+                    # Use secondLevelStyle for non-empty subdirectories with correct hyperlink
+                    echo "    A --> ${letter}[<a href=\"./$subdir_safe/\" target=\"_blank\" style=\"color:white\">$subdir_basename</a>]:::secondLevelStyle"
                 else
                     # Use secondLevelStyleMissing for empty subdirectories and remove hyperlink
-                    echo "    A --> ${letter}[$subdir_basename]:::secondLevelStyleMissing"
+                    echo "    A --> ${letter}[$subdir_safe]:::secondLevelStyleMissing"
                 fi
 
                 # Increment the letter for the next node
