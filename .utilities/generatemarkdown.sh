@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Function to convert a string to title case
+to_title_case() {
+    echo "$1" | sed 's/_/ /g' | sed 's/\b\(.\)/\u\1/g'
+}
+
 # Function to create markdown file with Mermaid diagram
 create_markdown() {
     local directory="$1"
@@ -23,22 +28,15 @@ create_markdown() {
     foldername_safe=$(echo "$foldername" | sed 's/ /_/g' | sed 's/-/_/g')
 
     # Find subdirectories
-    #-----------------------------------------------------------------------
-    # - mindepth 1: exclude the directory itself
-    # - maxdepth 1: only include the immediate children
-    # - type d: only include directories
     while IFS= read -r -d '' subdir; do
         subdirs+=("$subdir")
     done < <(find "$directory" -mindepth 1 -maxdepth 1 -type d -print0)
 
     # Create the Mermaid diagram if there are subdirectories
-    #-----------------------------------------------------------------------
-    # - If there are subdirectories, create the Mermaid diagram
-    # - If there are no subdirectories, do not create the Mermaid diagram
     if [ ${#subdirs[@]} -gt 0 ]; then
         {
             # Create the Mermaid diagram structure
-            echo "# $foldername"
+            echo "# $(to_title_case "$foldername")"
             echo
             echo '```mermaid'
             echo "graph TD;"
@@ -77,17 +75,19 @@ create_markdown() {
 create_verb_markdown() {
     local directory="$1"
     local foldername
-    local markdown_file="$directory/README.md"
     foldername=$(basename "$directory")
+    local title_case_foldername
+    title_case_foldername=$(to_title_case "$foldername")
+    local markdown_file="$directory/README.md"
     
     # Print the header
     {
         echo " "
-        echo " # $foldername Verb Documentation"
+        echo "# $title_case_foldername - Verb Documentation"
         echo " "
         printf "%-25s %-25s %-25s %-25s\n" "Category" "Type" "Functionality" "Specifics"
     } >> "$markdown_file"
-    
+
     # Find all .spl files in the specified directory, process and format their names
     find "$directory" -type f -name "*.spl" | while read -r file; do
         # Extract the filename without the path and extension
@@ -97,13 +97,13 @@ create_verb_markdown() {
         IFS='_' read -r -a parts <<< "$filename"
         
         # Print the first four elements of the array, formatted for even spacing, and append to the markdown file
-        printf "%-25s %-25s %-25s %-25s\n" "${parts[0]}" "${parts[1]}" "${parts[2]}" "${parts[3]}" >> "$markdown_file"
-    done
+        printf "%-25s %-25s %-25s %-25s\n" "${parts[0]}" "${parts[1]}" "${parts[2]}" "${parts[3]}"
+    done | sort | uniq >> "$markdown_file"
 }
 
 # Traverse directories and create markdown files
-find . -type d -not -path '*/\.*' -not -path './data*' | while read -r directory; do
-    if [ "$directory" != "." ]; then
+find ./data -type d -not -path '*/\.*' | while read -r directory; do
+    if [ "$directory" != "./data" ]; then
         create_markdown "$directory"
         create_verb_markdown "$directory"
     fi
